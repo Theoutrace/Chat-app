@@ -25,13 +25,9 @@ const Signup = (props) => {
   };
 
   const phoneTexthandler = (e) => {
-<<<<<<< HEAD
     if (/^\d*$/.test(e.target.value)) {
       setUserPhone(() => e.target.value);
     }
-=======
-    setUserPhone(() => e.target.value);
->>>>>>> fd28a6253a5cf9c52046e30f9144ae165a783588
   };
 
   const passwordTexthandler = (e) => {
@@ -46,36 +42,30 @@ const Signup = (props) => {
       phone: userPhone,
       password: userPassword,
     };
-    console.log("Signup", userObj);
 
-    const response = await axios.post(
-      `https://crudcrud.com/api/4dc987fdb00d4b44bc3c5273fdd66f83/folder`,
-      userObj,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-
+    const response = await axios.post(`http://localhost:3001/signup`, userObj, {
+      headers: { "Content-Type": "application/json" },
+    });
     console.log(response);
   };
   return (
     <form onSubmit={onSignupHandler}>
       <Card
         sx={{
-          maxWidth: 345,
-          minWidth: 300,
+          maxWidth: 350,
+          minWidth: 350,
           maxHeight: 500,
-<<<<<<< HEAD
           minHeight: 500,
-=======
-          minHeight: 450,
->>>>>>> fd28a6253a5cf9c52046e30f9144ae165a783588
         }}
         className="d-flex justify-content-center align-item-center"
       >
         <Box
           sx={{
-            "& .MuiTextField-root": { mx: 4, my: 1, width: "30ch" },
+            "& .MuiTextField-root": {
+              mx: 4,
+              my: 1,
+              width: "30ch",
+            },
           }}
           className="d-flex flex-column justify-content-center align-item-center"
         >

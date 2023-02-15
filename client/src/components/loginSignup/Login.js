@@ -15,12 +15,12 @@ const Login = (props) => {
     <form onSubmit={loginFormSubmitHandler}>
       <Card
         sx={{
-          maxWidth: 345,
-          minWidth: 300,
+          maxWidth: 350,
+          minWidth: 350,
           maxHeight: 400,
           minHeight: 400,
         }}
-        className="d-flex justify-content-center align-item-center"
+        className="d-flex justify-content-center align-item-center "
       >
         <Box
           sx={{
