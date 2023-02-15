@@ -6,7 +6,11 @@ require("dotenv").config();
 const userRoutes = require("./routes/user");
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

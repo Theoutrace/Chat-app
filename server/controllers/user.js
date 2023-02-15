@@ -26,7 +26,7 @@ exports.postSignup = async (req, res, next) => {
         const userInResponse = await User.findOne({ where: { email: email } });
         return res.status(200).json({
           message: { text: "user created" },
-          user: userInResponse,
+          user: { ...userInResponse, password: null },
           token: generateAccessToken(userInResponse.id, name, email, phone),
         });
       });

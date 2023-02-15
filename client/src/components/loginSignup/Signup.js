@@ -42,11 +42,23 @@ const Signup = (props) => {
       phone: userPhone,
       password: userPassword,
     };
-
-    const response = await axios.post(`http://localhost:3001/signup`, userObj, {
-      headers: { "Content-Type": "application/json" },
-    });
-    console.log(response);
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/signup`,
+        userObj,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (response.status === 550) {
+        throw new Error(response.data.message);
+      } else if (response.statusText === "OK") {
+        // console.log(response.data.user);
+        localStorage.setItem("token", response.data.token);
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
   return (
     <form onSubmit={onSignupHandler}>
