@@ -1,15 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
+import axios from "axios";
 import "./Login.css";
 
 const Login = (props) => {
-  const loginFormSubmitHandler = (e) => {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+
+  const emailInputHandler = (e) => {
+    setUserEmail(() => e.target.value);
+  };
+
+  const passwordInputHandler = (e) => {
+    setUserPassword(() => e.target.value);
+  };
+
+  const loginFormSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log("prevented");
+    const userObj = {
+      email: userEmail,
+      password: userPassword,
+    };
+
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/login`,
+        userObj,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
+      } else {
+        throw new Error(response.response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <form onSubmit={loginFormSubmitHandler}>
@@ -40,12 +72,20 @@ const Login = (props) => {
           >
             Login
           </Typography>
-          <TextField required id="outlined-required" label="Email" />
+          <TextField
+            required
+            id="outlined-required"
+            label="Email"
+            onChange={emailInputHandler}
+            value={userEmail}
+          />
           <TextField
             id="outlined-password-input"
             required
             label="Password"
             type="password"
+            onChange={passwordInputHandler}
+            value={userPassword}
           />
           <Typography variant="p" sx={{ mx: 4, mb: 1, width: "259px" }}>
             <span

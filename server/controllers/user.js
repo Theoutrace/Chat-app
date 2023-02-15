@@ -26,10 +26,39 @@ exports.postSignup = async (req, res, next) => {
         const userInResponse = await User.findOne({ where: { email: email } });
         return res.status(200).json({
           message: { text: "user created" },
-          user: { ...userInResponse, password: null },
+          user: userInResponse,
           token: generateAccessToken(userInResponse.id, name, email, phone),
         });
       });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.postLogin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const existingUser = await User.findOne({ where: { email } });
+
+    if (existingUser) {
+      const isMatched = bcrypt.compare(password, existingUser.password);
+      if (isMatched) {
+        return res.status(200).json({
+          message: "user login successful",
+          user: existingUser,
+          token: generateAccessToken(
+            existingUser.id,
+            existingUser.name,
+            existingUser.email,
+            existingUser.phone
+          ),
+        });
+      } else {
+        return res.status(401).json({ message: "Password didn't match!" });
+      }
+    } else {
+      return res.status(404).json({ message: "user not found!" });
     }
   } catch (error) {
     console.log(error);
