@@ -8,12 +8,12 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { NavLink } from "react-router-dom";
+import "./Navbar.css";
 
-const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
@@ -33,6 +33,19 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  let activeStyle = {
+    textDecoration: "none",
+    color: "white",
+    margin: "10px",
+    borderBottom: "2px solid white",
+  };
+  let inActiveStyle = {
+    textDecoration: "none",
+    color: "tan",
+    margin: "10px",
+    borderBottom: "2px solid rgba(240, 248, 255, 0)",
   };
 
   return (
@@ -55,7 +68,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            Dhindhora
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -87,11 +100,15 @@ function ResponsiveAppBar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <NavLink to="/services">Services</NavLink>
+              <NavLink
+                className={(isActive) =>
+                  isActive ? "active-nav-link" : "inactive-navlink"
+                }
+                to="chat"
+              >
+                Chat
+              </NavLink>
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -111,18 +128,21 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            Dhindhora
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            <NavLink
+              style={({ isActive }) => (isActive ? activeStyle : inActiveStyle)}
+              to="/services"
+            >
+              Services
+            </NavLink>
+            <NavLink
+              style={({ isActive }) => (isActive ? activeStyle : inActiveStyle)}
+              to="/chat"
+            >
+              Chat
+            </NavLink>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

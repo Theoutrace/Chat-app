@@ -1,0 +1,25 @@
+.add-cls-inp-bx-outer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.input-bx-cls-add {
+  background-color: rgb(228, 231, 234);
+  border: 0px;
+  border-radius: 50px;
+  padding-left: 20px;
+  height: 40px;
+}
+
+.input-bx-cls-add:focus {
+  outline: none;
+}
+
+.additional-send-attach-cls {
+  cursor: pointer;
+  /* background-color: aquamarine; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
