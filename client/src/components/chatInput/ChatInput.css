@@ -2,6 +2,8 @@
   position: absolute;
   left: 0;
   bottom: 0;
+  z-index: 2;
+  width: 100%;
 }
 
 .input-bx-cls-add {
@@ -18,8 +20,9 @@
 
 .additional-send-attach-cls {
   cursor: pointer;
-  /* background-color: aquamarine; */
+  background-color: rgba(127, 255, 212, 0);
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 0px;
 }
