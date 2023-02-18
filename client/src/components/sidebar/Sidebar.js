@@ -24,6 +24,7 @@ const Sidebar = () => {
       sx={{
         background: "#A1A5A63B",
         height: "100%",
+        width: { xs: "0px", md: "25%" },
         marginRight: "5px",
         borderRadius: "10px",
         flexGrow: 1,
@@ -31,7 +32,6 @@ const Sidebar = () => {
         position: "relative",
         paddingTop: "5%",
       }}
-      className="col-sm-3"
     >
       <Box
         sx={{
@@ -48,14 +48,14 @@ const Sidebar = () => {
         }}
         className="bg-white"
       >
-        <img src={userIcon} alt="useImage" width="15%" className="mx-2 p-1" />
+        <img src={userIcon} alt="useImage" width="45" className="mx-2 p-1" />
       </Box>
       {DUMMY_USERS.map((user) => {
         return (
           <Box
             sx={{
               background: "White",
-              height: "7%",
+              height: "55px",
               marginBottom: "1px",
               display: "flex",
               justifyContent: "left",

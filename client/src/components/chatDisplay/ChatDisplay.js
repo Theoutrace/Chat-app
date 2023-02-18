@@ -1,11 +1,13 @@
 import { Card } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
+import { useSelector } from "react-redux";
 import ChatDisplayHeader from "../chatDisplayUser/ChatDisplayHeader";
 import ChatInput from "../chatInput/ChatInput";
 import "./ChatDisplay.css";
 
 const ChatDisplay = () => {
+  const chatMsgs = useSelector((state) => state.chat.chat);
   const DUMMY_MESSAGE = [
     {
       user: "kapil",
@@ -19,15 +21,14 @@ const ChatDisplay = () => {
   ];
 
   return (
-    // <div >
     <Card
       sx={{
         height: "100%",
+        width: { xs: "100%", md: "75%" },
         backgroundColor: "none",
         borderRadius: "10px",
         position: "relative",
       }}
-      className={{ xs: "col-sm-12", md: "col-sm-9" }}
     >
       <div className="col-sm-12 container message-box-cntnr-disp ">
         <ChatDisplayHeader />
@@ -35,9 +36,8 @@ const ChatDisplay = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            paddingTop: "8%",
-            paddingBottom: "2%",
-            // marginBottom: "3%",
+            paddingTop: "80px",
+            paddingBottom: "80px",
           }}
         >
           {DUMMY_MESSAGE.map((item) => {
@@ -57,7 +57,6 @@ const ChatDisplay = () => {
         <ChatInput />
       </div>
     </Card>
-    // </div>
   );
 };
 
