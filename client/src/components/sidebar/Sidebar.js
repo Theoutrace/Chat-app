@@ -30,7 +30,7 @@ const Sidebar = () => {
         flexGrow: 1,
         display: { xs: "none", md: "block" },
         position: "relative",
-        paddingTop: "5%",
+        paddingTop: "65px",
       }}
     >
       <Box
@@ -53,6 +53,7 @@ const Sidebar = () => {
       {DUMMY_USERS.map((user) => {
         return (
           <Box
+            key={user.name}
             sx={{
               background: "White",
               height: "55px",

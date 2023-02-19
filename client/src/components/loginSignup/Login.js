@@ -6,8 +6,13 @@ import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
 import axios from "axios";
 import "./Login.css";
+import { useDispatch } from "react-redux";
+import { AuthActions } from "../../Store/reducers/auth-reducer";
+import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
 
@@ -36,6 +41,9 @@ const Login = (props) => {
       );
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", userEmail);
+        dispatch(AuthActions.login({ email: userEmail }));
+        navigate("/chat");
       } else {
         throw new Error(response.response.data.message);
       }

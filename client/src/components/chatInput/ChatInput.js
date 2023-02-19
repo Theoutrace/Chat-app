@@ -4,7 +4,12 @@ import sendIcon from "./images/send.png";
 import attachIcon from "./images/attach.png";
 import axios from "axios";
 import "./ChatInput.css";
+import { useDispatch, useSelector } from "react-redux";
+import { ChatActions } from "../../Store/reducers/chat-reducer";
+import jwtDecode from "jwt-decode";
 const ChatInput = () => {
+  const dispatch = useDispatch();
+  const chatMsg = useSelector((state) => state.chat.chat);
   const [messageText, setMessageText] = useState("");
   const messageOnChangeHandler = (e) => {
     console.log(e.target.value);
@@ -15,19 +20,17 @@ const ChatInput = () => {
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log("submitted");
     const messageObj = {
       message: messageText,
+      userId: jwtDecode(auth).id,
     };
-    const response = await axios.post(
-      `http://localhost:3001/chat/message`,
-      messageObj,
-      {
-        headers: { Authorization: auth, "Content-Type": "application/json" },
-      }
-    );
+    await axios.post(`http://localhost:3001/chat/message`, messageObj, {
+      headers: { Authorization: auth, "Content-Type": "application/json" },
+    });
 
-    console.log(response);
+    dispatch(ChatActions.addChat([...chatMsg, messageObj]));
+    dispatch(ChatActions.fetchData());
+    setMessageText(() => "");
   };
   return (
     <Card
@@ -39,16 +42,14 @@ const ChatInput = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "60px",
-        padding: "10px",
+        padding: "20px",
         borderRadius: "0px 0px 10px 10px",
         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-
         position: "absolute",
         left: "0",
         bottom: "0",
         zIndex: "2",
       }}
-      className={{ xs: "col-sm-12", md: "col-sm-9" }}
     >
       <div className="col-sm-1 d-flex justify-content-center m-1 additional-send-attach-cls p-1">
         <img src={attachIcon} alt="attach items" width="35px" />
@@ -58,6 +59,7 @@ const ChatInput = () => {
         placeholder="start typing..."
         onChange={messageOnChangeHandler}
         value={messageText}
+        sx={{ width: { sm: "80%" } }}
       />
       <button
         className="col-sm-1 m-1 additional-send-attach-cls p-1"

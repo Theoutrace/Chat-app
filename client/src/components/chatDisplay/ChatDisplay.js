@@ -4,22 +4,15 @@ import React from "react";
 import { useSelector } from "react-redux";
 import ChatDisplayHeader from "../chatDisplayUser/ChatDisplayHeader";
 import ChatInput from "../chatInput/ChatInput";
+import jwtDecode from "jwt-decode";
 import "./ChatDisplay.css";
 
 const ChatDisplay = () => {
   const chatMsgs = useSelector((state) => state.chat.chat);
-  const DUMMY_MESSAGE = [
-    {
-      user: "kapil",
-      message:
-        "Where are you?Duis dolor x reprehenderit in deserunt incididunt nulla tempor cillum.",
-    },
-    {
-      user: "user",
-      message: "Where are you?Duis dolor nulla laboris magna do aliqor cillum.",
-    },
-  ];
-
+  const auth = localStorage.getItem("token");
+  const userObj = jwtDecode(auth);
+  const userId = userObj.id;
+  // console.log(userId);
   return (
     <Card
       sx={{
@@ -40,16 +33,26 @@ const ChatDisplay = () => {
             paddingBottom: "80px",
           }}
         >
-          {DUMMY_MESSAGE.map((item) => {
+          {chatMsgs.map((item) => {
             return (
               <div
                 className={
-                  item.user === "user"
+                  item.userId === userId
                     ? "m-1 d-flex message-component-container-user-right"
                     : "m-1 d-flex message-component-container-receiver-left"
                 }
+                key={item.id}
               >
-                <h6>{item.message}</h6>
+                <div
+                  className={
+                    item.userId === userId
+                      ? "p-2  my-1 component-container-user-right-inner"
+                      : "p-2  my-1 component-container-user-left-inner"
+                  }
+                >
+                  <h6 key={item.id}>{item.message}</h6>
+                  <p>{new Date(item.updatedAt).toLocaleTimeString()}</p>
+                </div>
               </div>
             );
           })}

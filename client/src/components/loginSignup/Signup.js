@@ -5,9 +5,12 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 import "./Login.css";
+import { AuthActions } from "../../Store/reducers/auth-reducer";
 
 const Signup = (props) => {
+  const dispatch = useDispatch();
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPhone, setUserPhone] = useState("");
@@ -53,8 +56,9 @@ const Signup = (props) => {
       if (response.status === 550) {
         throw new Error(response.data.message);
       } else if (response.statusText === "OK") {
-        // console.log(response.data.user);
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", userEmail);
+        dispatch(AuthActions.login({ email: userEmail }));
       }
     } catch (error) {
       alert(error);

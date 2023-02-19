@@ -4,7 +4,7 @@ import Signup from "../../components/loginSignup/Signup";
 import "./LoginSignup.css";
 
 const LoginSignup = () => {
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
 
   const toggleLoginFormHandler = () => {
     setLogin((p) => !p);

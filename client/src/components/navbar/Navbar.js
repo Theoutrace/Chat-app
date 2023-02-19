@@ -8,15 +8,18 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import authIcon from "./images/auth.png";
 import "./Navbar.css";
-
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { AuthActions } from "../../Store/reducers/auth-reducer";
 
 function ResponsiveAppBar() {
+  const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -33,6 +36,13 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const userLogoutHandler = () => {
+    dispatch(AuthActions.logout());
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
+    localStorage.removeItem("messages");
   };
 
   let activeStyle = {
@@ -146,11 +156,30 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            {auth.login ? (
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
-            </Tooltip>
+            ) : (
+              <IconButton
+                sx={{
+                  p: 0,
+                  backgroundColor: "#D5D7D2",
+                  "&:hover": {
+                    backgroundColor: "white",
+                  },
+                }}
+              >
+                <Avatar
+                  alt="Login"
+                  src={authIcon}
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                />
+              </IconButton>
+            )}
+
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -167,11 +196,11 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center" onClick={userLogoutHandler}>
+                  Logout
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

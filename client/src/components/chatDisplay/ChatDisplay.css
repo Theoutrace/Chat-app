@@ -26,36 +26,75 @@
 }
 
 .message-component-container-user-right {
+  width: 100%;
+  margin: 0px;
+  color: white;
   display: flex;
-  justify-content: flex-end;
+  justify-content: right;
   align-items: center;
 }
 
-.message-component-container-user-right h6 {
-  background-color: #1976d2;
-  max-width: 80%;
-  padding: 10px 30px;
-  margin: 0px;
-  border-radius: 10px 10px 0px 10px;
-  color: white;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
-    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
-    rgba(0, 0, 0, 0.07) 0px 16px 16px;
-}
-
 .message-component-container-receiver-left {
+  width: 100%;
+  margin: 0px;
+  color: white;
   display: flex;
-  justify-content: start;
+  justify-content: left;
+  align-items: center;
 }
 
-.message-component-container-receiver-left h6 {
-  background-color: rgba(30, 28, 28, 0.775);
-  color: white;
+.component-container-user-right-inner {
+  background-color: #1976d2;
+  min-height: 65px;
   max-width: 80%;
-  padding: 10px 30px;
-  margin: 0px;
-  border-radius: 10px 10px 10px 0px;
+  display: flex;
+  border-radius: 20px 20px 0px 20px;
   box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
     rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
     rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  position: relative;
+  background-image: linear-gradient(to right, #0acffe 0%, #495aff 100%);
+}
+
+.component-container-user-right-inner h6 {
+  font-size: 1.2rem;
+  margin: 5px;
+  padding: 10px 10px 10px 20px;
+}
+
+.component-container-user-right-inner p {
+  font-size: 10px;
+  margin: 5px;
+  color: rgb(244, 239, 239);
+  position: absolute;
+  bottom: 0px;
+  right: 3px;
+}
+.component-container-user-left-inner {
+  background-color: #757678;
+  min-height: 65px;
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px 20px 20px 0px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
+    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
+    rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  position: relative;
+  background-image: linear-gradient(to right, #434343 0%, black 100%);
+}
+
+.component-container-user-left-inner h6 {
+  font-size: 1.2rem;
+  margin: 5px;
+  padding: 10px 20px 10px 10px;
+}
+
+.component-container-user-left-inner p {
+  font-size: 10px;
+  margin: 5px;
+  color: rgb(244, 239, 239);
+  position: absolute;
+  bottom: 0px;
+  left: 3px;
 }
