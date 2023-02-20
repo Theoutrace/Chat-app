@@ -9,28 +9,35 @@ import { ChatActions } from "../../Store/reducers/chat-reducer";
 import jwtDecode from "jwt-decode";
 const ChatInput = () => {
   const dispatch = useDispatch();
-  const chatMsg = useSelector((state) => state.chat.chat);
+  const selectedGroup = useSelector((state) => state.chat.selectedGroup);
+  const groupChatsMessages = useSelector((state) => state.chat.groupChats);
   const [messageText, setMessageText] = useState("");
   const messageOnChangeHandler = (e) => {
-    console.log(e.target.value);
     setMessageText(() => e.target.value);
   };
-
-  const auth = localStorage.getItem("token");
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
     const messageObj = {
       message: messageText,
-      userId: jwtDecode(auth).id,
+      userId: jwtDecode(localStorage.getItem("token")).id,
+      groupId: selectedGroup.id,
     };
     await axios.post(`http://localhost:3001/chat/message`, messageObj, {
-      headers: { Authorization: auth, "Content-Type": "application/json" },
+      headers: {
+        Authorization: localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
     });
 
-    dispatch(ChatActions.addChat([...chatMsg, messageObj]));
-    dispatch(ChatActions.fetchData());
+    dispatch(
+      ChatActions.addGroupChats([
+        ...groupChatsMessages,
+        { ...messageObj, updatedAt: new Date() },
+      ])
+    );
     setMessageText(() => "");
+    dispatch(ChatActions.fetchMsg());
   };
   return (
     <Card

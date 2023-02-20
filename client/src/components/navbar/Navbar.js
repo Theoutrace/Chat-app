@@ -42,7 +42,7 @@ function ResponsiveAppBar() {
     dispatch(AuthActions.logout());
     localStorage.removeItem("email");
     localStorage.removeItem("token");
-    localStorage.removeItem("messages");
+    localStorage.removeItem("message");
   };
 
   let activeStyle = {

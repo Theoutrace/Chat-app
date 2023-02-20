@@ -98,3 +98,12 @@
   bottom: 0px;
   left: 3px;
 }
+
+.add-cls-ad-non-existent-group-case {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: grey;
+}

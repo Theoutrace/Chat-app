@@ -64,3 +64,17 @@ exports.postLogin = async (req, res, next) => {
     console.log(error);
   }
 };
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const allUsers = await User.findAll();
+
+    if (allUsers.length > 0) {
+      return res.status(200).json({ users: allUsers, success: true });
+    } else {
+      return res.status(404).json({ users: [], message: "No user found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "something went wrong!" });
+  }
+};
