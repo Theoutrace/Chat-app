@@ -1,25 +1,27 @@
 import { Card } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ChatDisplayHeader from "../chatDisplayUser/ChatDisplayHeader";
 import ChatInput from "../chatInput/ChatInput";
-import jwtDecode from "jwt-decode";
 import "./ChatDisplay.css";
 import groupIcon from "./images/group.png";
 import axios from "axios";
 import { ChatActions } from "../../Store/reducers/chat-reducer";
 import SingleUserInvite from "../singleUser/SingleUserInvite";
+import SingleGroupMember from "../singleGroupMember/SingleGroupMember";
+import SingleMessage from "./SingleMessage";
 
 const ChatDisplay = () => {
   const groupChatMsgs = useSelector((state) => state.chat.groupChats);
   const selectedGroup = useSelector((state) => state.chat.selectedGroup);
   const fetchUsers = useSelector((state) => state.chat.fetchUsers);
+  const showMembers = useSelector((state) => state.chat.showMembers);
+  const fetchGroupMembers = useSelector((state) => state.chat.fetchMembers);
+  const fetchMembers = useSelector((state) => state.chat.fetchMembers);
   const allUsers = useSelector((state) => state.chat.users);
   const dispatch = useDispatch();
-  const auth = localStorage.getItem("token");
-  const userObj = jwtDecode(auth);
-  const userId = userObj.id;
+  const messagesEndRef = useRef();
   useEffect(() => {
     (async function fetchUsers() {
       const response = await axios.get(
@@ -34,6 +36,31 @@ const ChatDisplay = () => {
       dispatch(ChatActions.addUsers(response.data.users));
     })();
   }, [fetchUsers, dispatch]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [groupChatMsgs]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView(); // can add scrollIntoView({ behavior: "smooth" }) for watching scrolling
+  };
+
+  useEffect(() => {
+    if (selectedGroup) {
+      (async function fetchGrpMemb() {
+        const response = await axios.get(
+          `http://localhost:3001/groups/getmembers/${selectedGroup.id}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        dispatch(ChatActions.addGroupMembers(response.data.groupMembers));
+        dispatch(ChatActions.addGroupAdmins(response.data.groupAdmins));
+      })();
+    }
+  }, [selectedGroup, fetchGroupMembers, dispatch, fetchMembers]);
 
   return (
     <Card
@@ -59,13 +86,33 @@ const ChatDisplay = () => {
                 padding: "10px 20px",
               }}
             >
-              {allUsers.map((user) => {
-                return (
-                  <div className="p-1">
-                    <SingleUserInvite user={user} />
-                  </div>
-                );
-              })}
+              {allUsers.length > 1 ? (
+                allUsers.map((user) => {
+                  return (
+                    <div className="p-1" key={user.id}>
+                      <SingleUserInvite key={user.id} user={user} />
+                    </div>
+                  );
+                })
+              ) : (
+                <h6>No users available</h6>
+              )}
+            </Card>
+          )}
+          {showMembers && (
+            <Card
+              sx={{
+                position: "absolute",
+                zIndex: "8",
+                right: { xs: "50px", md: "100px" },
+                top: "70px",
+                width: "300px",
+                padding: "10px 20px",
+              }}
+            >
+              <div className="p-1">
+                <SingleGroupMember />
+              </div>
             </Card>
           )}
           <Box
@@ -77,37 +124,9 @@ const ChatDisplay = () => {
             }}
           >
             {groupChatMsgs.map((item) => {
-              return (
-                <>
-                  {selectedGroup.id === item.groupId && (
-                    <div
-                      className={
-                        item.userId === userId
-                          ? "m-1 d-flex message-component-container-user-right"
-                          : "m-1 d-flex message-component-container-receiver-left"
-                      }
-                      key={item.id}
-                    >
-                      <span
-                        className={
-                          item.userId === userId
-                            ? "p-2  my-1 component-container-user-right-inner "
-                            : "p-2  my-1 component-container-user-left-inner"
-                        }
-                      >
-                        <h6 key={item.id}>{item.message}</h6>
-                        <p>
-                          {new Date(item.updatedAt).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                      </span>
-                    </div>
-                  )}
-                </>
-              );
+              return <SingleMessage key={item.id} item={item} />;
             })}
+            <div ref={messagesEndRef} />
           </Box>
           <ChatInput />
         </div>

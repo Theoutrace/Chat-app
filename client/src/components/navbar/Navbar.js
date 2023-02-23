@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import authIcon from "./images/auth.png";
 import "./Navbar.css";
 import { AuthActions } from "../../Store/reducers/auth-reducer";
+import jwtDecode from "jwt-decode";
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
@@ -157,9 +158,22 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             {auth.login ? (
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+              <div className="d-flex align-items-center">
+                <div className="mx-4 text-white ">
+                  <h5 className="m-0">
+                    {jwtDecode(localStorage.getItem("token")).name}
+                  </h5>
+                </div>
+                <IconButton sx={{ p: 0 }}>
+                  <Avatar
+                    onClick={handleOpenUserMenu}
+                    alt="Remy Sharp"
+                    sx={{ bgcolor: "white", color: "black", fontWeight: "500" }}
+                  >
+                    {jwtDecode(localStorage.getItem("token")).name[0]}
+                  </Avatar>
+                </IconButton>
+              </div>
             ) : (
               <IconButton
                 sx={{

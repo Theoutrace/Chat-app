@@ -130,11 +130,13 @@ const Sidebar = (props) => {
       </Box>
       <div className="user-cnt-container-div">
         {showNotifications && (
-          <div className="not-ifi-cation-container-all-side-bar">
-            {notifications.map((item) => {
-              return <SingleNotification item={item} />;
-            })}
-          </div>
+          <>
+            <div className="not-ifi-cation-container-all-side-bar">
+              {notifications.map((item) => {
+                return <SingleNotification item={item} />;
+              })}
+            </div>
+          </>
         )}
         {allGroups.map((user) => {
           return <Group key={user.id} item={user} />;

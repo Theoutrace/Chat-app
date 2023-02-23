@@ -19,6 +19,8 @@ const Group = (props) => {
       (chat) => chat.groupId === props.item.id
     );
     dispatch(ChatActions.addGroupChats(groupChatFiltered));
+    dispatch(ChatActions.fetchGroupMembers());
+    dispatch(ChatActions.fetchData());
   };
 
   return (
@@ -26,13 +28,13 @@ const Group = (props) => {
       onClick={openGroupHandler}
       key={props.item.id}
       sx={{
-        background: `${
+        backgroundColor: `${
           selectedGroup && selectedGroup.id === props.item.id
             ? "wheat"
             : "white"
         }`,
         height: "55px",
-        marginBottom: "1px",
+        marginBottom: "3px",
         display: "flex",
         justifyContent: "left",
         alignItems: "center",

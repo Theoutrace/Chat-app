@@ -5,10 +5,13 @@ const UserGroup = require("../model/userGroup");
 exports.postInvite = async (req, res) => {
   try {
     const inviteData = req.body;
+    console.log(inviteData);
     await req.user.createInvite({
       receiverId: inviteData.receiverId,
       groupId: inviteData.groupId,
       status: inviteData.status,
+      invitorName: inviteData.invitorName,
+      groupName: inviteData.groupName,
     });
     res.status(200).json({ message: "Invite sent!", success: true });
   } catch (error) {
@@ -34,7 +37,6 @@ exports.getInvite = async (req, res) => {
         message: "Got all pending invitations",
         invitations,
         success: true,
-        sender: req.user.name,
       });
     }
   } catch (error) {
@@ -64,11 +66,11 @@ exports.acceptReject = async (req, res) => {
       await UserGroup.create({
         userId: req.user.id,
         groupId: requestObj.notification.groupId,
+        isAdmin: false,
       });
       const addedInGroup = await Group.findAll({
         where: { id: requestObj.notification.groupId },
       });
-      console.log(addedInGroup);
       return res.status(200).json({
         groups: addedInGroup,
         message: "Accepted invite",

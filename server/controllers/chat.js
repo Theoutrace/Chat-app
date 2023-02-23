@@ -1,6 +1,7 @@
 const Chat = require("../model/chats");
 const UserGroup = require("../model/userGroup");
 const { Op } = require("sequelize");
+const User = require("../model/user");
 
 exports.postMessage = async (req, res, next) => {
   const { message, groupId } = req.body;
@@ -26,29 +27,57 @@ exports.getChats = async (req, res) => {
   const user = req.user;
   try {
     let chats = [];
+    const groups = await UserGroup.findAll({
+      where: { userId: user.id },
+    });
     if (initialId === 0) {
-      const groups = await UserGroup.findAll({
-        where: { userId: user.id },
-      });
       for (let i = 0; i < groups.length; i++) {
         const chat = await Chat.findAll({
           where: { groupId: groups[i].groupId },
           order: [["createdAt", "DESC"]],
-          limit: 40,
         });
-        chats.push(...chat);
+        for (let j = 0; j < chat.length; j++) {
+          const sender = await User.findOne({
+            where: { id: chat[j].userId },
+          });
+          const senderId = sender.id;
+          const senderName = sender.name;
+          const { id, message, createdAt, groupId } = chat[j];
+          const singleChatObj = {
+            messageId: id,
+            message,
+            createdAt,
+            groupId,
+            senderId,
+            senderName,
+          };
+          chats.push(singleChatObj);
+        }
       }
     } else {
-      const groups = await UserGroup.findAll({
-        where: { userId: user.id },
-      });
-      for (let i = 0; i < groups.length; i++) {
+      for (let j = 0; j < groups.length; j++) {
+        // console.log(groups[j]);
         const chat = await Chat.findAll({
-          where: { groupId: groups[i].groupId, id: { [Op.gt]: initialId } },
+          where: { groupId: groups[j].groupId, id: { [Op.gt]: initialId } },
           order: [["createdAt", "DESC"]],
-          limit: 10,
         });
-        chats.push(...chat);
+        for (let k = 0; k < chat.length; k++) {
+          const sender = await User.findOne({
+            where: { id: chat[k].userId },
+          });
+          const senderId = sender.id;
+          const senderName = sender.name;
+          const { id, message, createdAt, groupId } = chat[k];
+          const singleChatObj = {
+            messageId: id,
+            message,
+            createdAt,
+            groupId,
+            senderId,
+            senderName,
+          };
+          chats.push(singleChatObj);
+        }
       }
     }
     let filteredChats = chats.filter(
@@ -61,28 +90,6 @@ exports.getChats = async (req, res) => {
       return res
         .status(200)
         .json({ chats: [], message: "No chats available!" });
-    }
-  } catch (error) {
-    return res
-      .status(400)
-      .json({ message: "Something went wrong!", success: false });
-  }
-};
-
-exports.getGroupChats = async (req, res) => {
-  const groupId = req.params.id;
-  try {
-    const groupchats = await Chat.findAll({
-      where: { groupId: groupId },
-      order: [["createdAt", "ASC"]],
-      limit: 20,
-    });
-    if (groupchats.length > 0) {
-      return res.status(200).json({ groupchats, success: true });
-    } else {
-      return res
-        .status(200)
-        .json({ groupchats: [], message: "No chats available!" });
     }
   } catch (error) {
     return res

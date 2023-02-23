@@ -47,15 +47,29 @@ const SingleNotification = (props) => {
 
   return (
     <div className="single-noti-receiver-outer-dv m-1">
-      <Card sx={{ padding: "15px" }}>
-        <div className="p-1 my-2 text-secondary">
-          You have been invited by user {props.item.userId} to group
-          {props.item.groupId}.
+      <Card
+        sx={{
+          padding: "10px",
+        }}
+      >
+        <div className="text-secondary">
+          <p className="m-0">
+            <span className="mx-1 text-black sender-nme-name-sty">
+              {props.item.invitorName}
+            </span>
+            has invited you to
+          </p>
+          <div className="my-1">
+            <span className="text-white spn-cls-dv-in-grp-inv-ite">
+              {props.item.groupName}
+            </span>
+          </div>
         </div>
         <ButtonGroup
           disableElevation
           variant="contained"
           aria-label="Disabled elevation buttons"
+          sx={{ marginTop: "10px" }}
         >
           <Button
             sx={{ backgroundColor: "black", fontSize: "11px" }}

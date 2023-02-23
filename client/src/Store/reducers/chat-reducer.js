@@ -13,6 +13,10 @@ const ChatSlice = createSlice({
     users: [],
     notifications: [],
     fetchNotifications: false,
+    showMembers: false,
+    chatMembers: [],
+    fetchMembers: false,
+    selectedGroupAdmins: [],
   },
   reducers: {
     addChat(state, action) {
@@ -46,6 +50,18 @@ const ChatSlice = createSlice({
     },
     fetchinvite(state, action) {
       state.fetchNotifications = !state.fetchNotifications;
+    },
+    showMembers(state) {
+      state.showMembers = !state.showMembers;
+    },
+    addGroupMembers(state, action) {
+      state.chatMembers = action.payload;
+    },
+    addGroupAdmins(state, action) {
+      state.selectedGroupAdmins = action.payload;
+    },
+    fetchGroupMembers(state) {
+      state.fetchMembers = !state.fetchMembers;
     },
   },
 });

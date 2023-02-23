@@ -17,7 +17,15 @@ const Invite = sequelize.define("invite", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  groupName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
   status: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  invitorName: {
     type: Sequelize.STRING,
     allowNull: false,
   },

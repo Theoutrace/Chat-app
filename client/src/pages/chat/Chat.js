@@ -7,6 +7,7 @@ import "./Chat.css";
 import { AuthActions } from "../../Store/reducers/auth-reducer";
 
 const Chat = (props) => {
+  console.log("chat");
   const dispatch = useDispatch();
   const fetchMsg = useSelector((state) => state.chat.fetchMsg);
   const userEmail = localStorage.getItem("email");
@@ -18,7 +19,7 @@ const Chat = (props) => {
   const askId =
     msgInLocal === null || msgInLocal === "undefined" || msgInLocal.length === 0
       ? 0
-      : msgInLocal[msgInLocal.length - 1].id;
+      : msgInLocal[msgInLocal.length - 1].messageId;
 
   useEffect(() => {
     (async function fetchChat() {
@@ -31,7 +32,6 @@ const Chat = (props) => {
           },
         }
       );
-      console.log(response);
       if (
         msgInLocal === "undefined" ||
         msgInLocal === null ||
@@ -39,16 +39,18 @@ const Chat = (props) => {
       ) {
         localStorage.setItem("message", JSON.stringify(response.data.chats));
       } else {
+        console.log("optimise here");
+        // yet to update and optimise this part, left for some other time in future
         const combinedChats = [...msgInLocal, ...response.data.chats];
         if (combinedChats.length >= 20) {
-          const updatedCombinedChats = combinedChats.slice(-5);
-          localStorage.setItem("message", JSON.stringify(updatedCombinedChats));
+          localStorage.setItem("message", JSON.stringify(combinedChats));
         } else {
           localStorage.setItem("message", JSON.stringify(combinedChats));
         }
       }
     })();
   }, [fetchMsg, auth, askId, msgInLocal]);
+
   return (
     <div className=" p-2 d-flex container additional-chat-page-design-css">
       <Sidebar modal={props.modal} />

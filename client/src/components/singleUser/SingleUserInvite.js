@@ -2,6 +2,7 @@ import React from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 const SingleUserInvite = (props) => {
   const selectedGroup = useSelector((state) => state.chat.selectedGroup);
@@ -11,6 +12,8 @@ const SingleUserInvite = (props) => {
     const inviteObj = {
       receiverId: props.user.id,
       groupId: selectedGroup.id,
+      groupName: selectedGroup.name,
+      invitorName: jwtDecode(localStorage.getItem("token")).name,
       status: "pending",
     };
 
@@ -24,7 +27,6 @@ const SingleUserInvite = (props) => {
         },
       }
     );
-
     console.log(response);
   };
   return (

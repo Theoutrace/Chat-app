@@ -70,6 +70,15 @@
   bottom: 0px;
   right: 3px;
 }
+/* .component-container-user-right-inner .user-name-cls-msg-sngl {
+  padding: 3px 5px;
+  border-radius: 10px;
+  text-align: right;
+  position: absolute;
+  left: -30px;
+  top: 0;
+  font-size: 12px;
+} */
 .component-container-user-left-inner {
   background-color: #757678;
   min-height: 65px;
@@ -97,6 +106,16 @@
   position: absolute;
   bottom: 0px;
   left: 3px;
+}
+.component-container-user-left-inner .user-name-cls-msg-sngl {
+  background-color: rgb(80, 77, 77);
+  padding: 3px 5px;
+  border-radius: 10px;
+  text-align: right;
+  position: absolute;
+  right: -15px;
+  top: 0;
+  font-size: 12px;
 }
 
 .add-cls-ad-non-existent-group-case {

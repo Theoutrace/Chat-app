@@ -33,7 +33,13 @@ const ChatInput = () => {
     dispatch(
       ChatActions.addGroupChats([
         ...groupChatsMessages,
-        { ...messageObj, updatedAt: new Date() },
+        {
+          message: messageObj.message,
+          senderId: messageObj.userId,
+          groupId: messageObj.groupId,
+          senderName: jwtDecode(localStorage.getItem("token")).name,
+          createdAt: new Date(),
+        },
       ])
     );
     setMessageText(() => "");
