@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { AuthActions } from "./Store/reducers/auth-reducer";
 
 function App(props) {
-  console.log("app.js");
   const dispatch = useDispatch();
   const userEmail = localStorage.getItem("email");
   if (userEmail) {

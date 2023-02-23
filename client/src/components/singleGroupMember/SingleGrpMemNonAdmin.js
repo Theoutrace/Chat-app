@@ -24,7 +24,7 @@ const SingleGrpMemNonAdmin = (props) => {
       groupId: selectedGroup.id,
     };
     await axios.post(
-      `http://localhost:3001/groups/removemember`,
+      `http://54.65.202.166:3000/groups/removemember`,
       memberToRemove,
       {
         headers: {
@@ -41,12 +41,16 @@ const SingleGrpMemNonAdmin = (props) => {
     const memberDetails = {
       ...props.member,
     };
-    await axios.post(`http://localhost:3001/groups/makeadmin`, memberDetails, {
-      headers: {
-        Authorization: localStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-    });
+    await axios.post(
+      `http://54.65.202.166:3000/groups/makeadmin`,
+      memberDetails,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+      }
+    );
     dispatch(ChatActions.fetchGroupMembers());
   };
 

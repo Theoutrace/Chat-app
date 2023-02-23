@@ -7,7 +7,6 @@ import "./Chat.css";
 import { AuthActions } from "../../Store/reducers/auth-reducer";
 
 const Chat = (props) => {
-  console.log("chat");
   const dispatch = useDispatch();
   const fetchMsg = useSelector((state) => state.chat.fetchMsg);
   const userEmail = localStorage.getItem("email");
@@ -24,7 +23,7 @@ const Chat = (props) => {
   useEffect(() => {
     (async function fetchChat() {
       const response = await axios.get(
-        `http://localhost:3001/chat/userchats/${askId}`,
+        `http://54.65.202.166:3000/chat/userchats/${askId}`,
         {
           headers: {
             Authorization: auth,

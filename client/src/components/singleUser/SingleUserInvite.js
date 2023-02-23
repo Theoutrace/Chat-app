@@ -18,7 +18,7 @@ const SingleUserInvite = (props) => {
     };
 
     const response = await axios.post(
-      `http://localhost:3001/user/invite`,
+      `http://54.65.202.166:3000/user/invite`,
       inviteObj,
       {
         headers: {

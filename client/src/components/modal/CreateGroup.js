@@ -19,7 +19,7 @@ export default function CreateGroup(props) {
     const grpObj = {
       groupName,
     };
-    await axios.post(`http://localhost:3001/groups/create`, grpObj, {
+    await axios.post(`http://54.65.202.166:3000/groups/create`, grpObj, {
       headers: {
         Authorization: localStorage.getItem("token"),
         "Content-Type": "application/json",

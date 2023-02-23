@@ -16,7 +16,7 @@ const SingleNotification = (props) => {
       notification: props.item,
     };
     const response = await axios.post(
-      `http://localhost:3001/user/invite/status`,
+      `http://54.65.202.166:3000/user/invite/status`,
       sendObj,
       {
         headers: {
@@ -36,7 +36,7 @@ const SingleNotification = (props) => {
       status: "rejected",
       notification: props.item,
     };
-    await axios.post(`http://localhost:3001/user/invite/status`, sendObj, {
+    await axios.post(`http://54.65.202.166:3000/user/invite/status`, sendObj, {
       headers: {
         Authorization: localStorage.getItem("token"),
         "Content-Type": "application/json",

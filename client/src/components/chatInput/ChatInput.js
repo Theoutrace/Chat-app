@@ -23,7 +23,7 @@ const ChatInput = () => {
       userId: jwtDecode(localStorage.getItem("token")).id,
       groupId: selectedGroup.id,
     };
-    await axios.post(`http://localhost:3001/chat/message`, messageObj, {
+    await axios.post(`http://54.65.202.166:3000/chat/message`, messageObj, {
       headers: {
         Authorization: localStorage.getItem("token"),
         "Content-Type": "application/json",

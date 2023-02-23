@@ -27,7 +27,7 @@ const Sidebar = (props) => {
   useEffect(() => {
     (async function fetchGroups() {
       const response = await axios.get(
-        `http://localhost:3001/groups/getgroups`,
+        `http://54.65.202.166:3000/groups/getgroups`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -50,12 +50,15 @@ const Sidebar = (props) => {
 
   useEffect(() => {
     (async function fetchNotifications() {
-      const response = await axios.get(`http://localhost:3001/user/getinvite`, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        `http://54.65.202.166:3000/user/getinvite`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
       dispatch(ChatActions.addNotifications(response.data.invitations));
     })();
   }, [dispatch, fetchNotifications, showNotifications, fetchGroups]);

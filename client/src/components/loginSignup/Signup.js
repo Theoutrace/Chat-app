@@ -47,7 +47,7 @@ const Signup = (props) => {
     };
     try {
       const response = await axios.post(
-        `http://localhost:3001/signup`,
+        `http://54.65.202.166:3000/signup`,
         userObj,
         {
           headers: { "Content-Type": "application/json" },

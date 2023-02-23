@@ -25,7 +25,7 @@ const ChatDisplay = () => {
   useEffect(() => {
     (async function fetchUsers() {
       const response = await axios.get(
-        `http://localhost:3001/users/receivers`,
+        `http://54.65.202.166:3000/users/receivers`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -48,7 +48,7 @@ const ChatDisplay = () => {
     if (selectedGroup) {
       (async function fetchGrpMemb() {
         const response = await axios.get(
-          `http://localhost:3001/groups/getmembers/${selectedGroup.id}`,
+          `http://54.65.202.166:3000/groups/getmembers/${selectedGroup.id}`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
