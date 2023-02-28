@@ -1,17 +1,20 @@
-import React, { useState } from "react";
-import Card from "@mui/material/Card";
-import sendIcon from "./images/send.png";
+import React, { useState, useEffect } from "react";
 import attachIcon from "./images/attach.png";
+import { useDispatch, useSelector } from "react-redux";
+import sendIcon from "./images/send.png";
+import Card from "@mui/material/Card";
+import jwtDecode from "jwt-decode";
 import axios from "axios";
 import "./ChatInput.css";
-import { useDispatch, useSelector } from "react-redux";
 import { ChatActions } from "../../Store/reducers/chat-reducer";
-import jwtDecode from "jwt-decode";
-const ChatInput = () => {
+
+const ChatInput = (props) => {
   const dispatch = useDispatch();
   const selectedGroup = useSelector((state) => state.chat.selectedGroup);
-  const groupChatsMessages = useSelector((state) => state.chat.groupChats);
+  const AllChats = useSelector((state) => state.chat.AllChats);
   const [messageText, setMessageText] = useState("");
+  const userDetails = jwtDecode(localStorage.getItem("token"));
+
   const messageOnChangeHandler = (e) => {
     setMessageText(() => e.target.value);
   };
@@ -20,31 +23,30 @@ const ChatInput = () => {
     e.preventDefault();
     const messageObj = {
       message: messageText,
-      userId: jwtDecode(localStorage.getItem("token")).id,
+      userId: userDetails.id,
       groupId: selectedGroup.id,
     };
-    await axios.post(`http://54.65.202.166:3000/chat/message`, messageObj, {
+    await axios.post(`http://localhost:3001/chat/message`, messageObj, {
       headers: {
         Authorization: localStorage.getItem("token"),
         "Content-Type": "application/json",
       },
     });
 
-    dispatch(
-      ChatActions.addGroupChats([
-        ...groupChatsMessages,
-        {
-          message: messageObj.message,
-          senderId: messageObj.userId,
-          groupId: messageObj.groupId,
-          senderName: jwtDecode(localStorage.getItem("token")).name,
-          createdAt: new Date(),
-        },
-      ])
-    );
+    const messageDetails = {
+      createdAt: new Date().getTime().toString(),
+      groupId: selectedGroup.id,
+      message: messageText,
+      senderId: userDetails.id,
+      senderName: userDetails.name,
+    };
+
+    props.socket.emit("send-message", messageDetails);
+
+    dispatch(ChatActions.addToAllChat([...AllChats, messageDetails]));
     setMessageText(() => "");
-    dispatch(ChatActions.fetchMsg());
   };
+
   return (
     <Card
       component="form"

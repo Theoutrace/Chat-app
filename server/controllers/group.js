@@ -16,6 +16,7 @@ exports.createGroup = async (req, res, next) => {
     );
     return res.status(201).json({
       message: "Successfully created new group!",
+      groupObj,
     });
   } catch (error) {
     return res.status(500).json(error);

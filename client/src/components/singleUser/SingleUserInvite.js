@@ -16,23 +16,21 @@ const SingleUserInvite = (props) => {
       invitorName: jwtDecode(localStorage.getItem("token")).name,
       status: "pending",
     };
-
-    const response = await axios.post(
-      `http://54.65.202.166:3000/user/invite`,
-      inviteObj,
-      {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log(response);
+    await axios.post(`http://localhost:3001/user/invite`, inviteObj, {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+    });
+    props.socket.emit("send-group-invite", inviteObj, props.user.id);
   };
   return (
     <>
       {userEmail !== props.user.email && (
-        <div className="d-flex justify-content-between align-items-center">
+        <div
+          key={props.user.id}
+          className="d-flex justify-content-between align-items-center"
+        >
           <div>{props.user.name}</div>
           <div>
             <AddCircleOutlineIcon

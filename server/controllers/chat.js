@@ -56,7 +56,6 @@ exports.getChats = async (req, res) => {
       }
     } else {
       for (let j = 0; j < groups.length; j++) {
-        // console.log(groups[j]);
         const chat = await Chat.findAll({
           where: { groupId: groups[j].groupId, id: { [Op.gt]: initialId } },
           order: [["createdAt", "DESC"]],

@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 const SingleMessage = (props) => {
   const selectedGroup = useSelector((state) => state.chat.selectedGroup);
   const auth = localStorage.getItem("token");
-  const userObj = jwtDecode(auth);
-  const loggedInUser = userObj.id;
+  const loggedInUser = jwtDecode(auth).id;
+
   return (
     <>
       {selectedGroup.id === props.item.groupId && (
@@ -32,7 +32,7 @@ const SingleMessage = (props) => {
             </div>
             <h6 key={props.item.id}>{props.item.message}</h6>
             <p>
-              {new Date(props.item.createdAt).toLocaleTimeString([], {
+              {new Date(parseInt(props.item.createdAt)).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
               })}

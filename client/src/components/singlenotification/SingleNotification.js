@@ -1,12 +1,15 @@
 import React from "react";
+import { ChatActions } from "../../Store/reducers/chat-reducer";
+import { useDispatch, useSelector } from "react-redux";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import { Card } from "@mui/material";
-import axios from "axios";
 import "./SingleNotification.css";
-import { useDispatch, useSelector } from "react-redux";
-import { ChatActions } from "../../Store/reducers/chat-reducer";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+
 const SingleNotification = (props) => {
+  console.log(props);
   const dispatch = useDispatch();
   const groups = useSelector((state) => state.chat.groups);
 
@@ -15,20 +18,33 @@ const SingleNotification = (props) => {
       status: "accepted",
       notification: props.item,
     };
-    const response = await axios.post(
-      `http://54.65.202.166:3000/user/invite/status`,
-      sendObj,
-      {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    // console.log(response);
-    dispatch(ChatActions.fetchGroups());
-    dispatch(ChatActions.fetchinvite());
-    dispatch(ChatActions.addGroups([...groups, ...response.data.groups]));
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/user/invite/status`,
+        sendObj,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      dispatch(ChatActions.fetchGroups());
+      dispatch(ChatActions.fetchinvite());
+      dispatch(ChatActions.addGroups([...groups, ...response.data.groups]));
+
+      const details = {
+        groupId: props.item.groupId,
+        groupName: props.item.groupName,
+        joinerName: jwtDecode(localStorage.getItem("token")).name,
+      };
+
+      props.socket.emit("join-private-group", details, (data) => {
+        console.log(data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onRejectHandler = async () => {
@@ -36,12 +52,17 @@ const SingleNotification = (props) => {
       status: "rejected",
       notification: props.item,
     };
-    await axios.post(`http://54.65.202.166:3000/user/invite/status`, sendObj, {
-      headers: {
-        Authorization: localStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      await axios.post(`http://localhost:3001/user/invite/status`, sendObj, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
     dispatch(ChatActions.fetchGroups());
   };
 

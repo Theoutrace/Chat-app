@@ -1,31 +1,33 @@
-import { Card } from "@mui/material";
-import { Box } from "@mui/system";
 import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import SingleGroupMember from "../singleGroupMember/SingleGroupMember";
 import ChatDisplayHeader from "../chatDisplayUser/ChatDisplayHeader";
-import ChatInput from "../chatInput/ChatInput";
-import "./ChatDisplay.css";
-import groupIcon from "./images/group.png";
-import axios from "axios";
 import { ChatActions } from "../../Store/reducers/chat-reducer";
 import SingleUserInvite from "../singleUser/SingleUserInvite";
-import SingleGroupMember from "../singleGroupMember/SingleGroupMember";
+import { useDispatch, useSelector } from "react-redux";
+import ChatInput from "../chatInput/ChatInput";
 import SingleMessage from "./SingleMessage";
+import groupIcon from "./images/group.png";
+import { Card } from "@mui/material";
+import { Box } from "@mui/system";
+import "./ChatDisplay.css";
+import axios from "axios";
 
-const ChatDisplay = () => {
-  const groupChatMsgs = useSelector((state) => state.chat.groupChats);
-  const selectedGroup = useSelector((state) => state.chat.selectedGroup);
-  const fetchUsers = useSelector((state) => state.chat.fetchUsers);
-  const showMembers = useSelector((state) => state.chat.showMembers);
+const ChatDisplay = (props) => {
   const fetchGroupMembers = useSelector((state) => state.chat.fetchMembers);
+  const selectedGroup = useSelector((state) => state.chat.selectedGroup);
   const fetchMembers = useSelector((state) => state.chat.fetchMembers);
+  const GroupChats = useSelector((state) => state.chat.GroupChats);
+  const showMembers = useSelector((state) => state.chat.showMembers);
+  const fetchUsers = useSelector((state) => state.chat.fetchUsers);
   const allUsers = useSelector((state) => state.chat.users);
-  const dispatch = useDispatch();
+  const AllChats = useSelector((state) => state.chat.AllChats);
   const messagesEndRef = useRef();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     (async function fetchUsers() {
       const response = await axios.get(
-        `http://54.65.202.166:3000/users/receivers`,
+        `http://localhost:3001/users/receivers`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -36,19 +38,20 @@ const ChatDisplay = () => {
       dispatch(ChatActions.addUsers(response.data.users));
     })();
   }, [fetchUsers, dispatch]);
+
   useEffect(() => {
     scrollToBottom();
-  }, [groupChatMsgs]);
+  }, [GroupChats]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView(); // can add scrollIntoView({ behavior: "smooth" }) for watching scrolling
+    messagesEndRef.current?.scrollIntoView();
   };
 
   useEffect(() => {
     if (selectedGroup) {
       (async function fetchGrpMemb() {
         const response = await axios.get(
-          `http://54.65.202.166:3000/groups/getmembers/${selectedGroup.id}`,
+          `http://localhost:3001/groups/getmembers/${selectedGroup.id}`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -62,14 +65,29 @@ const ChatDisplay = () => {
     }
   }, [selectedGroup, fetchGroupMembers, dispatch, fetchMembers]);
 
+  useEffect(() => {
+    console.log("here::::::::::::");
+    if (selectedGroup) {
+      const groupChatFiltered =
+        AllChats &&
+        AllChats.filter((chat) => chat.groupId === selectedGroup.id);
+      dispatch(ChatActions.addToGroupChats(groupChatFiltered));
+    }
+  }, [AllChats, dispatch, selectedGroup]);
+
+  console.log("here: >>>>>>");
+  if (props.socket) {
+    props.socket.on("message-in-server", (data) => {
+      console.log(data);
+      dispatch(ChatActions.addToAllChat([...AllChats, data]));
+    });
+  }
+
   return (
     <Card
+      className="chat-disp-outer-card-comp"
       sx={{
-        height: "100%",
-        width: { xs: "100%", md: "75%" },
-        backgroundColor: "none",
-        borderRadius: "10px",
-        position: "relative",
+        width: { xs: selectedGroup ? "100%" : "0%", md: "75%" },
       }}
     >
       {selectedGroup ? (
@@ -90,7 +108,11 @@ const ChatDisplay = () => {
                 allUsers.map((user) => {
                   return (
                     <div className="p-1" key={user.id}>
-                      <SingleUserInvite key={user.id} user={user} />
+                      <SingleUserInvite
+                        key={user.id}
+                        user={user}
+                        socket={props.socket}
+                      />
                     </div>
                   );
                 })
@@ -123,12 +145,13 @@ const ChatDisplay = () => {
               paddingBottom: "80px",
             }}
           >
-            {groupChatMsgs.map((item) => {
-              return <SingleMessage key={item.id} item={item} />;
-            })}
+            {GroupChats &&
+              GroupChats.map((item) => {
+                return <SingleMessage key={item.id} item={item} />;
+              })}
             <div ref={messagesEndRef} />
           </Box>
-          <ChatInput />
+          <ChatInput socket={props.socket} />
         </div>
       ) : (
         <div className="col-sm-12 add-cls-ad-non-existent-group-case">

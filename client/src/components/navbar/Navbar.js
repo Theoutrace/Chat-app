@@ -77,6 +77,7 @@ function ResponsiveAppBar() {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              "&:hover": { color: "white" },
             }}
           >
             Dhindhora
@@ -142,12 +143,6 @@ function ResponsiveAppBar() {
             Dhindhora
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <NavLink
-              style={({ isActive }) => (isActive ? activeStyle : inActiveStyle)}
-              to="/services"
-            >
-              Services
-            </NavLink>
             <NavLink
               style={({ isActive }) => (isActive ? activeStyle : inActiveStyle)}
               to="/chat"

@@ -47,7 +47,7 @@ const Signup = (props) => {
     };
     try {
       const response = await axios.post(
-        `http://54.65.202.166:3000/signup`,
+        `http://localhost:3001/signup`,
         userObj,
         {
           headers: { "Content-Type": "application/json" },
@@ -72,8 +72,10 @@ const Signup = (props) => {
           minWidth: 350,
           maxHeight: 500,
           minHeight: 500,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-        className="d-flex justify-content-center align-item-center"
       >
         <Box
           sx={{
@@ -82,8 +84,11 @@ const Signup = (props) => {
               my: 1,
               width: "30ch",
             },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          className="d-flex flex-column justify-content-center align-item-center"
         >
           <Typography
             variant="h5"

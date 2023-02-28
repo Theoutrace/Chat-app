@@ -33,7 +33,7 @@ const Login = (props) => {
 
     try {
       const response = await axios.post(
-        `http://54.65.202.166:3000/login`,
+        `http://localhost:3001/login`,
         userObj,
         {
           headers: { "Content-Type": "application/json" },
@@ -42,7 +42,9 @@ const Login = (props) => {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("email", userEmail);
-        dispatch(AuthActions.login({ email: userEmail }));
+        dispatch(
+          AuthActions.login({ email: userEmail, auth: response.data.token })
+        );
         navigate("/chat");
       } else {
         throw new Error(response.response.data.message);
@@ -59,14 +61,19 @@ const Login = (props) => {
           minWidth: 350,
           maxHeight: 400,
           minHeight: 400,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-        className="d-flex justify-content-center align-item-center "
       >
         <Box
           sx={{
             "& .MuiTextField-root": { mx: 4, my: 1, width: "30ch" },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          className="d-flex flex-column justify-content-center align-item-center"
           autoComplete="on"
         >
           <Typography

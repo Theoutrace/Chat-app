@@ -1,3 +1,13 @@
+.Adept-chat-disp-cls-ou-se-c-co-mp {
+  width: 100%;
+  display: block;
+  padding: 10px;
+  position: relative;
+  height: 60px;
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 15px;
+}
+
 .add-cls-msg-bx-disp-outer {
   position: absolute;
   top: 0;

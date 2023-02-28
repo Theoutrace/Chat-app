@@ -1,13 +1,14 @@
-import { Card } from "@mui/material";
 import React from "react";
-import "./ChatDisplayHeader.css";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { ChatActions } from "../../Store/reducers/chat-reducer";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
 import GroupsIcon from "@mui/icons-material/Groups";
-import { ChatActions } from "../../Store/reducers/chat-reducer";
 import { Button } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { Card } from "@mui/material";
+import "./ChatDisplayHeader.css";
 
 const ChatDisplayHeader = () => {
   const selectedGroup = useSelector((state) => state.chat.selectedGroup);
@@ -19,29 +20,37 @@ const ChatDisplayHeader = () => {
   const showMembersHandler = () => {
     dispatch(ChatActions.showMembers());
   };
+
+  const goBackHandler = () => {
+    dispatch(ChatActions.selectGroup(null));
+  };
   return (
     <div className="col-sm-12 add-cls-msg-bx-disp-outer">
-      <Card
-        sx={{
-          width: "100%",
-          display: "block",
-          padding: "10px",
-          position: "relative",
-          height: "60px",
-          borderRadius: "10px 10px 0px 0px",
-          boxShadow: "rgba(0, 0, 0, 0.20) 0px 2px 15px",
-        }}
-      >
+      <Card className="Adept-chat-disp-cls-ou-se-c-co-mp">
         <div className="d-flex col-sm-11 align-item-center justify-content-left">
+          <ChevronLeftIcon
+            onClick={goBackHandler}
+            sx={{
+              margin: "6px 8px",
+              backgroundColor: "grey",
+              width: "30px",
+              height: "30px",
+              borderRadius: "25px",
+              color: "white",
+              display: { xs: "block", md: "none" },
+              cursor: "pointer",
+            }}
+          />
           {selectedGroup && (
             <GroupsIcon
               sx={{
-                margin: "8px 20px",
+                margin: "8px 10px",
                 color: "grey",
                 "&:hover": {
                   cursor: "pointer",
                   color: "#1976d2",
                 },
+                display: { xs: "none", md: "block" },
               }}
             ></GroupsIcon>
           )}

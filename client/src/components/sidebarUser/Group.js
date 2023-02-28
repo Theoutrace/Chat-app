@@ -1,10 +1,10 @@
 import React from "react";
-import "./Group.css";
-import { Box } from "@mui/system";
-import GroupsIcon from "@mui/icons-material/Groups";
-import { useDispatch, useSelector } from "react-redux";
 import { ChatActions } from "../../Store/reducers/chat-reducer";
+import { useDispatch, useSelector } from "react-redux";
+import GroupsIcon from "@mui/icons-material/Groups";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/system";
+import "./Group.css";
 
 const Group = (props) => {
   const navigate = useNavigate();
@@ -12,15 +12,8 @@ const Group = (props) => {
   const selectedGroup = useSelector((state) => state.chat.selectedGroup);
 
   const openGroupHandler = async () => {
-    dispatch(ChatActions.selectGroup(props.item));
     navigate(`/chat/${props.item.id}`);
-    const allChatsInLocal = JSON.parse(localStorage.getItem("message"));
-    const groupChatFiltered = allChatsInLocal.filter(
-      (chat) => chat.groupId === props.item.id
-    );
-    dispatch(ChatActions.addGroupChats(groupChatFiltered));
-    dispatch(ChatActions.fetchGroupMembers());
-    dispatch(ChatActions.fetchData());
+    dispatch(ChatActions.selectGroup(props.item));
   };
 
   return (
@@ -57,9 +50,7 @@ const Group = (props) => {
         }}
       ></GroupsIcon>
       <div className="d-flex flex-row user-single-sidebr-outer-contnr">
-        <div>
-          <h6 className="m-0 p-2">{props.item.name}</h6>
-        </div>
+        <h6 className="m-0 p-2">{props.item.name}</h6>
       </div>
     </Box>
   );

@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const ChatSlice = createSlice({
   name: "chat",
   initialState: {
-    chat: [],
-    fetchMsg: false,
+    AllChats: [],
+    updateMsg: false,
     groups: [],
     fetchGroups: false,
-    groupChats: [],
+    GroupChats: [],
     selectedGroup: null,
     fetchUsers: false,
     users: [],
@@ -19,11 +19,11 @@ const ChatSlice = createSlice({
     selectedGroupAdmins: [],
   },
   reducers: {
-    addChat(state, action) {
-      state.chat = action.payload;
+    addToAllChat(state, action) {
+      state.AllChats = action.payload;
     },
     fetchData(state, action) {
-      state.fetchMsg = !state.fetchMsg;
+      state.updateMsg = !state.updateMsg;
     },
     addGroups(state, action) {
       state.groups = action.payload;
@@ -31,12 +31,11 @@ const ChatSlice = createSlice({
     fetchGroups(state, action) {
       state.fetchGroups = !state.fetchGroups;
     },
-
     selectGroup(state, action) {
       state.selectedGroup = action.payload;
     },
-    addGroupChats(state, action) {
-      state.groupChats = action.payload;
+    addToGroupChats(state, action) {
+      state.GroupChats = action.payload;
     },
 
     fetchUsers(state, action) {

@@ -5,26 +5,29 @@ import Chat from "./pages/chat/Chat";
 import { Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AuthActions } from "./Store/reducers/auth-reducer";
+import { useEffect } from "react";
 
 function App(props) {
   const dispatch = useDispatch();
   const userEmail = localStorage.getItem("email");
-  if (userEmail) {
-    dispatch(AuthActions.login({ email: userEmail }));
-  }
+  const authToken = localStorage.getItem("token");
   const auth = useSelector((state) => state.auth);
-  const showElement = auth.login ? (
-    <Chat modal={props.modal} />
-  ) : (
-    <LoginSignup />
-  );
+
+  useEffect(() => {
+    if ((userEmail, authToken)) {
+      dispatch(AuthActions.login({ email: userEmail, token: authToken }));
+    }
+  }, [authToken, userEmail, dispatch]);
 
   return (
     <div className="App">
       <ResponsiveAppBar />
       <Routes>
         {!auth.login && <Route path="/login" element={<LoginSignup />} />}
-        <Route path="/chat/*" element={showElement} />
+        <Route
+          path="/chat/*"
+          element={auth.login ? <Chat modal={props.modal} /> : <LoginSignup />}
+        />
       </Routes>
     </div>
   );

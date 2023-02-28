@@ -10,6 +10,9 @@ const SingleGroupMember = () => {
   return (
     <>
       <div className="justify-content-between align-items-center ">
+        {groupAdmins.length === 0 && chatMembers.length === 0 && (
+          <h6>No member available</h6>
+        )}
         {groupAdmins.map((admin) => {
           return (
             <div
