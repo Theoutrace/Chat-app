@@ -30,12 +30,19 @@ const SingleMessage = (props) => {
                 ? ""
                 : props.item.senderName}
             </div>
-            <h6 key={props.item.id}>{props.item.message}</h6>
+            {props.item.isUrl ? (
+              <img src={props.item.message} width="200" heigth="200" alt="" />
+            ) : (
+              <h6 key={props.item.id}>{props.item.message}</h6>
+            )}
             <p>
-              {new Date(parseInt(props.item.createdAt)).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {new Date(Date.parse(props.item.createdAt)).toLocaleTimeString(
+                [],
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }
+              )}
             </p>
           </span>
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ChatDisplay from "../../components/chatDisplay/ChatDisplay";
 import { AuthActions } from "../../Store/reducers/auth-reducer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "../../components/sidebar/Sidebar";
 import io from "socket.io-client";
 import axios from "axios";

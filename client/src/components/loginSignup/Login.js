@@ -39,6 +39,7 @@ const Login = (props) => {
           headers: { "Content-Type": "application/json" },
         }
       );
+
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("email", userEmail);
@@ -47,10 +48,14 @@ const Login = (props) => {
         );
         navigate("/chat");
       } else {
-        throw new Error(response.response.data.message);
+        alert(response.data.message);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      if (err.response) {
+        alert(err.response.data.message);
+      } else {
+        console.log("Something went wrong here!");
+      }
     }
   };
   return (

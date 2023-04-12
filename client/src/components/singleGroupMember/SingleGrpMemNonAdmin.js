@@ -19,34 +19,34 @@ const SingleGrpMemNonAdmin = (props) => {
   }
 
   const removeGroupMemberHandler = async () => {
-    // const memberToRemove = {
-    //   memberId: props.member.id,
-    //   groupId: selectedGroup.id,
-    // };
-    // await axios.post(
-    //   `http://localhost:3001/groups/removemember`,
-    //   memberToRemove,
-    //   {
-    //     headers: {
-    //       Authorization: localStorage.getItem("token"),
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
-    // );
-    // dispatch(ChatActions.fetchGroupMembers());
+    const memberToRemove = {
+      memberId: props.member.id,
+      groupId: selectedGroup.id,
+    };
+    await axios.post(
+      `http://localhost:3001/groups/removemember`,
+      memberToRemove,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    dispatch(ChatActions.fetchGroupMembers());
   };
 
   const makeAdminHandler = async () => {
-    // const memberDetails = {
-    //   ...props.member,
-    // };
-    // await axios.post(`http://localhost:3001/groups/makeadmin`, memberDetails, {
-    //   headers: {
-    //     Authorization: localStorage.getItem("token"),
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    // dispatch(ChatActions.fetchGroupMembers());
+    const memberDetails = {
+      ...props.member,
+    };
+    await axios.post(`http://localhost:3001/groups/makeadmin`, memberDetails, {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+    });
+    dispatch(ChatActions.fetchGroupMembers());
   };
 
   return (

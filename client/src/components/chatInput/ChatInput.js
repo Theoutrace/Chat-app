@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import attachIcon from "./images/attach.png";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import sendIcon from "./images/send.png";
 import Card from "@mui/material/Card";
 import jwtDecode from "jwt-decode";
-import axios from "axios";
 import "./ChatInput.css";
 import { ChatActions } from "../../Store/reducers/chat-reducer";
+import SendIcon from "@mui/icons-material/Send";
 
 const ChatInput = (props) => {
   const dispatch = useDispatch();
@@ -21,44 +19,35 @@ const ChatInput = (props) => {
 
   const formSubmitHandler = async (e) => {
     e.preventDefault();
-    const messageObj = {
-      message: messageText,
-      userId: userDetails.id,
-      groupId: selectedGroup.id,
-    };
-    await axios.post(`http://localhost:3001/chat/message`, messageObj, {
-      headers: {
-        Authorization: localStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-    });
 
-    const messageDetails = {
-      createdAt: new Date().getTime().toString(),
+    const sentMessageDetails = {
+      createdAt: new Date().toISOString(),
       groupId: selectedGroup.id,
       message: messageText,
       senderId: userDetails.id,
       senderName: userDetails.name,
+      isUrl: false,
     };
-
-    props.socket.emit("send-message", messageDetails);
-
-    dispatch(ChatActions.addToAllChat([...AllChats, messageDetails]));
+    props.socket.emit("send-message", sentMessageDetails); // <--- sending submitted message to the socket
     setMessageText(() => "");
   };
 
+  if (props.socket) {
+    props.socket.on("new-message", (data) => {
+      dispatch(ChatActions.addToAllChat([...AllChats, data]));
+    });
+  }
+
   return (
     <Card
-      component="form"
-      onSubmit={formSubmitHandler}
       sx={{
         width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         height: "60px",
-        padding: "20px",
-        borderRadius: "0px 0px 10px 10px",
+        padding: "20px 30px",
+        borderRadius: "0px 0px 5px 5px",
         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
         position: "absolute",
         left: "0",
@@ -66,22 +55,17 @@ const ChatInput = (props) => {
         zIndex: "2",
       }}
     >
-      <div className="col-sm-1 d-flex justify-content-center m-1 additional-send-attach-cls p-1">
-        <img src={attachIcon} alt="attach items" width="35px" />
-      </div>
-      <input
-        className="col-sm-10  input-bx-cls-add"
-        placeholder="start typing..."
-        onChange={messageOnChangeHandler}
-        value={messageText}
-        sx={{ width: { sm: "80%" } }}
-      />
-      <button
-        className="col-sm-1 m-1 additional-send-attach-cls p-1"
-        type="submit"
-      >
-        <img src={sendIcon} alt="send" width="35px" />
-      </button>
+      <form className=" add-form-inp-frm-dcls" onSubmit={formSubmitHandler}>
+        <input
+          className="col-sm-10  input-bx-cls-add"
+          placeholder="start typing..."
+          onChange={messageOnChangeHandler}
+          value={messageText}
+        />
+        <button className=" additional-send-attach-cls bg-grey " type="submit ">
+          <SendIcon sx={{ fontSize: "20px", color: "white" }} />
+        </button>
+      </form>
     </Card>
   );
 };

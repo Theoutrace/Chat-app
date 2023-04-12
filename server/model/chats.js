@@ -14,6 +14,10 @@ const Chat = sequelize.define("chat", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  isUrl: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+  },
 });
 
 module.exports = Chat;

@@ -1,7 +1,7 @@
 import React from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useSelector } from "react-redux";
-import axios from "axios";
+// import axios from "axios";
 import jwtDecode from "jwt-decode";
 
 const SingleUserInvite = (props) => {
@@ -16,12 +16,6 @@ const SingleUserInvite = (props) => {
       invitorName: jwtDecode(localStorage.getItem("token")).name,
       status: "pending",
     };
-    await axios.post(`http://localhost:3001/user/invite`, inviteObj, {
-      headers: {
-        Authorization: localStorage.getItem("token"),
-        "Content-Type": "application/json",
-      },
-    });
     props.socket.emit("send-group-invite", inviteObj, props.user.id);
   };
   return (

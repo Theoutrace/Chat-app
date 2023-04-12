@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ChatInput from "../chatInput/ChatInput";
 import SingleMessage from "./SingleMessage";
 import groupIcon from "./images/group.png";
+import teaIcon from "./images/teaIcon.gif";
 import { Card } from "@mui/material";
 import { Box } from "@mui/system";
 import "./ChatDisplay.css";
@@ -66,7 +67,6 @@ const ChatDisplay = (props) => {
   }, [selectedGroup, fetchGroupMembers, dispatch, fetchMembers]);
 
   useEffect(() => {
-    console.log("here::::::::::::");
     if (selectedGroup) {
       const groupChatFiltered =
         AllChats &&
@@ -75,19 +75,15 @@ const ChatDisplay = (props) => {
     }
   }, [AllChats, dispatch, selectedGroup]);
 
-  console.log("here: >>>>>>");
-  if (props.socket) {
-    props.socket.on("message-in-server", (data) => {
-      console.log(data);
-      dispatch(ChatActions.addToAllChat([...AllChats, data]));
-    });
-  }
-
   return (
     <Card
       className="chat-disp-outer-card-comp"
       sx={{
-        width: { xs: selectedGroup ? "100%" : "0%", md: "75%" },
+        width: {
+          xs: selectedGroup ? "100%" : "0%",
+          md: "75%",
+          borderRadius: "5px",
+        },
       }}
     >
       {selectedGroup ? (
@@ -145,10 +141,16 @@ const ChatDisplay = (props) => {
               paddingBottom: "80px",
             }}
           >
-            {GroupChats &&
+            {GroupChats.length !== 0 ? (
               GroupChats.map((item) => {
                 return <SingleMessage key={item.id} item={item} />;
-              })}
+              })
+            ) : (
+              <div className="d-flex flex-column justify-content-center align-items-center mt-4">
+                <img src={teaIcon} alt="teaIcon" width="40px" />
+                <h4 className="text-secondary">Start the conversation...</h4>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </Box>
           <ChatInput socket={props.socket} />

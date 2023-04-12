@@ -19,6 +19,7 @@ const ChatDisplayHeader = () => {
 
   const showMembersHandler = () => {
     dispatch(ChatActions.showMembers());
+    dispatch(ChatActions.fetchGroupMembers());
   };
 
   const goBackHandler = () => {
@@ -26,13 +27,20 @@ const ChatDisplayHeader = () => {
   };
   return (
     <div className="col-sm-12 add-cls-msg-bx-disp-outer">
-      <Card className="Adept-chat-disp-cls-ou-se-c-co-mp">
-        <div className="d-flex col-sm-11 align-item-center justify-content-left">
+      <Card
+        sx={{
+          borderRadius: "5px 5px 0px 0px",
+          boxShadow: "rgba(0, 0, 0, 0.2) 0px 2px 15px",
+          padding: "0px 20px",
+          backgroundColor: "white",
+        }}
+        className="Adept-chat-disp-cls-ou-se-c-co-mp"
+      >
+        <div className="xtra-dv-cls-thr-in">
           <ChevronLeftIcon
             onClick={goBackHandler}
             sx={{
-              margin: "6px 8px",
-              backgroundColor: "grey",
+              backgroundColor: "black",
               width: "30px",
               height: "30px",
               borderRadius: "25px",
@@ -44,8 +52,7 @@ const ChatDisplayHeader = () => {
           {selectedGroup && (
             <GroupsIcon
               sx={{
-                margin: "8px 10px",
-                color: "grey",
+                color: "#1976D2",
                 "&:hover": {
                   cursor: "pointer",
                   color: "#1976d2",
@@ -54,7 +61,7 @@ const ChatDisplayHeader = () => {
               }}
             ></GroupsIcon>
           )}
-          <div className="d-flex align-items-center mx-2 ">
+          <div className="d-flex align-items-center mx-2">
             <h6 className="text-secondary my-2">
               {selectedGroup ? selectedGroup.name : ""}
             </h6>
@@ -65,12 +72,11 @@ const ChatDisplayHeader = () => {
             sx={{
               position: "absolute",
               right: "100px",
-              top: "25%",
               backgroundColor: "white",
               borderRadius: "20px",
-              color: "black",
+              color: "#1976D2",
               padding: "0px 10px",
-              border: "2px solid grey",
+              border: "2px dashed #1976D2",
               textTransform: "capitalize",
               "&:hover": {
                 backgroundColor: "#1976D2",
@@ -84,12 +90,15 @@ const ChatDisplayHeader = () => {
             Members
           </Button>
           <PersonAddIcon
-            sx={{ position: "absolute", right: "50px", top: "25%" }}
+            sx={{
+              position: "absolute",
+              right: "50px",
+              color: "#1976D2",
+              "&:hover": { cursor: "pointer" },
+            }}
             onClick={displayUsersHandler}
           />
-          <MoreVertIcon
-            sx={{ position: "absolute", right: "10px", top: "25%" }}
-          />
+          <MoreVertIcon sx={{ position: "absolute", right: "10px" }} />
         </div>
       </Card>
     </div>
